@@ -3,7 +3,7 @@
  * @Author: fengpu 1126120965@qq.com
  * @Date: 2024-09-13 12:43:41
  * @LastEditors: fengpu 1126120965@qq.com
- * @LastEditTime: 2024-09-18 11:06:07
+ * @LastEditTime: 2024-09-24 10:47:45
  * @FilePath: \fengpu-study\work\Pina的理解.md
  * Endless Story. - NANA
 -->
@@ -25,7 +25,7 @@ Vuex\Pina\Redux 都是 Flux 的一种实现
   > 但 Vuex 不建议这样做。状态管理器的初衷就是数据流清晰并且可调式，devtool 监听 state 的修改实际是监听 commit dispatch 的，直接修改会导致开发者工具无法追踪数据的修改
 - View（视图）
   根据 store 中的数据，渲染生成的页面，与 store 存在订阅关系
-  （Vue 里面的状态就是响应式数据，可以收集视图。而 React 中，状态就是 state，在数据改变时，会引起 setState，驱动视图更改吗？）
+  （Vue 里面的状态就是响应式数据，可以收集视图。）
 - Dispatcher（派发器）
   接收 action，分发到 store。
 - Action（动作）
@@ -43,7 +43,7 @@ Vuex\Pina\Redux 都是 Flux 的一种实现
 * 无过多的魔法字符串注入，只需要导入函数并调用它们，然后享受自动补全的乐趣就好。
 * 无需要动态添加 Store，它们默认都是动态的，甚至你可能都不会注意到这点。注意，你仍然可以在任何时候手动使用一个 Store 来注册它，但因为它是自动的，所以你不需要担心它。
 * 不再有嵌套结构的模块。你仍然可以通过导入和使用另一个 Store 来隐含地嵌套 stores 空间。虽然 Pinia 从设计上* 提供的是一个扁平的结构，但仍然能够在 Store 之间进行交叉组合。你甚至可以让 Stores 有循环依赖关系。
-不再有可命名的模块。考虑到 Store 的扁平架构，Store 的命名取决于它们的定义方式，你甚至可以说所有 Store 都应该命名。
+* 不再有可命名的模块。考虑到 Store 的扁平架构，Store 的命名取决于它们的定义方式，你甚至可以说所有 Store 都应该命名。
 
 ### Store
 ### getter
