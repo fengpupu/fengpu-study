@@ -8,15 +8,9 @@
  * Endless Story. - NANA
 -->
 <template>
-  <ElButton @click="onClick">
-    {{ store.state.count }}
+  <ElButton >
+    lalal
   </ElButton>
 </template>
 <script setup lang="ts">
-import { useStore } from "vuex";
-const store = useStore();
-console.log(store.state);
-const onClick = () => {
-  store.state.count++;
-};
 </script>
