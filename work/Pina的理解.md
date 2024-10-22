@@ -45,6 +45,10 @@ Vuex\Pina\Redux 都是 Flux 的一种实现
 * 不再有嵌套结构的模块。你仍然可以通过导入和使用另一个 Store 来隐含地嵌套 stores 空间。虽然 Pinia 从设计上* 提供的是一个扁平的结构，但仍然能够在 Store 之间进行交叉组合。你甚至可以让 Stores 有循环依赖关系。
 * 不再有可命名的模块。考虑到 Store 的扁平架构，Store 的命名取决于它们的定义方式，你甚至可以说所有 Store 都应该命名。
 
+### 组件外的pina
+* 在组件外的Pina，需要注意引入顺序(Vuex 也有这样的问题吗？因为router的映入方式)
+![alt text](./image/image.png)
+
 ### Store
 ### getter
 ### action
