@@ -3,8 +3,8 @@
  * @Author: fengpu 1126120965@qq.com
  * @Date: 2024-09-13 12:43:41
  * @LastEditors: fengpu 1126120965@qq.com
- * @LastEditTime: 2024-09-24 10:47:45
- * @FilePath: \fengpu-study\work\Pina的理解.md
+ * @LastEditTime: 2024-10-25 13:23:57
+ * @FilePath: \fengpu\fengpu-study\work\Vue\Pina的理解.md
  * Endless Story. - NANA
 -->
 <!-- flux -->
@@ -38,17 +38,21 @@ Vuex\Pina\Redux 都是 Flux 的一种实现
 ## Pina
 
 ### Pina 和 Vuex 的区别
-* mutation 已被弃用。它们经常被认为是极其冗余的。它们初衷是带来 devtools 的集成方案，但这已不再是一个问题了。
-* 无需要创建自定义的复杂包装器来支持 TypeScript，一切都可标注类型，API 的设计方式是尽可能地利用 TS 类型推理。
-* 无过多的魔法字符串注入，只需要导入函数并调用它们，然后享受自动补全的乐趣就好。
-* 无需要动态添加 Store，它们默认都是动态的，甚至你可能都不会注意到这点。注意，你仍然可以在任何时候手动使用一个 Store 来注册它，但因为它是自动的，所以你不需要担心它。
-* 不再有嵌套结构的模块。你仍然可以通过导入和使用另一个 Store 来隐含地嵌套 stores 空间。虽然 Pinia 从设计上* 提供的是一个扁平的结构，但仍然能够在 Store 之间进行交叉组合。你甚至可以让 Stores 有循环依赖关系。
-* 不再有可命名的模块。考虑到 Store 的扁平架构，Store 的命名取决于它们的定义方式，你甚至可以说所有 Store 都应该命名。
 
-### 组件外的pina
-* 在组件外的Pina，需要注意引入顺序(Vuex 也有这样的问题吗？因为router的映入方式)
-![alt text](./image/image.png)
+- mutation 已被弃用。它们经常被认为是极其冗余的。它们初衷是带来 devtools 的集成方案，但这已不再是一个问题了。
+- 无需要创建自定义的复杂包装器来支持 TypeScript，一切都可标注类型，API 的设计方式是尽可能地利用 TS 类型推理。
+- 无过多的魔法字符串注入，只需要导入函数并调用它们，然后享受自动补全的乐趣就好。
+- 无需要动态添加 Store，它们默认都是动态的，甚至你可能都不会注意到这点。注意，你仍然可以在任何时候手动使用一个 Store 来注册它，但因为它是自动的，所以你不需要担心它。
+- 不再有嵌套结构的模块。你仍然可以通过导入和使用另一个 Store 来隐含地嵌套 stores 空间。虽然 Pinia 从设计上\* 提供的是一个扁平的结构，但仍然能够在 Store 之间进行交叉组合。你甚至可以让 Stores 有循环依赖关系。
+- 不再有可命名的模块。考虑到 Store 的扁平架构，Store 的命名取决于它们的定义方式，你甚至可以说所有 Store 都应该命名。
+
+### 组件外的 pina
+
+- 在组件外的 Pina，需要注意引入顺序(Vuex 也有这样的问题吗？因为 router 的映入方式)
+  ![alt text](../image/image.png)
 
 ### Store
+
 ### getter
+
 ### action

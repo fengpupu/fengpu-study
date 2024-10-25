@@ -9,7 +9,7 @@
 -->
 ## 开发静态引入和构建静态引入不一致问题
 
-![alt text](image.png)
+![alt text](../image/image.png)
 Vite 用户反馈的痛点：
 * 相对较慢的生产构建速度
 * 开发和生产环境之间的一致性问题
