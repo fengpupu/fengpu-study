@@ -3,13 +3,13 @@
  * @Author: fengpu 1126120965@qq.com
  * @Date: 2024-10-29 13:29:22
  * @LastEditors: fengpu 1126120965@qq.com
- * @LastEditTime: 2024-10-30 13:28:30
- * @FilePath: \fengpu-study\Vue3Code\core\packages\vue\examples\computed\testTrigger.html
+ * @LastEditTime: 2024-10-31 15:21:25
+ * @FilePath: \Vue3-core\packages\vue\examples\computed\testTrigger.html
  * Endless Story. - NANA
 -->
 <script src="../../dist/vue.global.js"></script>
 
-<div id="father" style="background-color: pink">
+<div id="father">
   {{arr}}
   <div></div>
   <button @click="insert">添加父Arr</button>
@@ -17,7 +17,7 @@
 </div>
 <script type="text/x-template" id="child">
   <g>
-    <div style="background-color: aquamarine">
+    <div >
       <h1>子组件</h1>
       {{childArr}}
       <div></div>
@@ -38,7 +38,7 @@
       const childArr = computed(
         {
           get() {
-            console.log('get---')
+            console.log('--computed get---')
             return props.arr.map(item => item + '-child')
           },
           // childArr.value的改变，会自动触发setter，setter通知arr更新，arr的更新通知了计算属性的get
@@ -59,9 +59,29 @@
         },
       )
       const insert = () => {
-        console.log('insert child', childArr.value)
-        childArr.value.push(childArr.value.length + 1)
-        triggerRef(childArr)
+        childArr.value.push('1')
+        /**
+         * author:fengpu
+         * 这里的push只会触发set
+         * const obj = {
+            _value: 0,
+            get value() {
+              console.log('get')
+              return obj._value
+            },
+            set value(value) {
+              obj._value = value
+            },
+          }
+          obj.value = [1, 2, 3, 4, 5]
+          console.log('********')
+          obj.value.push('12')
+          // set
+          // ********
+          // get
+         */
+        //  triggerRef(childArr)
+        childArr.dep.trigger()
       }
       const change = () => {
         console.log('change child', childArr.value)

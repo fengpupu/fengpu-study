@@ -16814,8 +16814,9 @@ var Vue = (() => {
     return false;
   }
   function refreshComputed(computed3) {
+    console.log("---refreshComputed running---");
     if (computed3.flags & 4 /* TRACKING */ && !(computed3.flags & 16 /* DIRTY */)) {
-      console.log("get do nothing return");
+      console.log("----refreshComputed nothing return---");
       return;
     }
     computed3.flags &= ~16 /* DIRTY */;
@@ -18104,20 +18105,30 @@ var Vue = (() => {
      *      一个是将dirty属性置为true
      *      一个是触发依赖计算属性的依赖更新
      *  同时，计算属性的value值改变，也会触发set
-     *  所以，导致计算属性的set函数执行，1、他依赖的响应式数据trigger 2、自己的value属性值改变
-     * 
+     *  所以，导致计算属性的set函数执行:
+     *    1、他依赖的响应式数据trigger
+     *    2、自己的value属性值改变
+     *    注意：他本身并不触发dep更新（待验证）
+     *
+     * 在get的时候，先触发value的get，验证dirty，通过再调用computed.fn
+     *  只要访问了value，就会触发get value，除非是value赋值，才会触发set value
+     *  所以注册的get回调，实际上只会在dirty为true的时候执行
+     *
      * onTrigger
      *  包含在自己的副作用函数中，当依赖的响应式数据改变，会调用这个副作用 （fengpuTODO：需要验证）
      *
      * 问题：
-     *  triggerRef
+     *  triggerRef一个shallowRef
      *    1、为啥不触发set
-     *      实际上 响应数据的更新只会触发当前属性的set （fengpuTODO：待验证）
+     *      实际上 响应数据的更新只会触发当前属性的set，而不是ref.value的set （fengpuTODO：待验证）
      *      set是拿到dep，触发dep的一个方式，而不是dep触发一定来自set，并且set也不一定触发dep更新（计算属性的set就没有，只是一个回调而已）
      *    2、为啥不触发onTrigger
      *    3、从哪里得到的dep
+     *      triggerRef(childArr) == childArr.dep.trigger()
+          
      */
     get value() {
+      console.log("---------get computed,not fn--------");
       const link = true ? this.dep.track({
         target: this,
         type: "get" /* GET */,
@@ -18152,7 +18163,6 @@ var Vue = (() => {
       cRef.onTrack = debugOptions.onTrack;
       cRef.onTrigger = debugOptions.onTrigger;
     }
-    console.log("------cRef------", cRef, cRef.value);
     return cRef;
   }
 

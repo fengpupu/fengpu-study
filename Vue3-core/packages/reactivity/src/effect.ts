@@ -362,12 +362,12 @@ function isDirty(sub: Subscriber): boolean {
  * @internal
  */
 export function refreshComputed(computed: ComputedRefImpl): undefined {
+  console.log('---refreshComputed running---')
   if (
     computed.flags & EffectFlags.TRACKING &&
     !(computed.flags & EffectFlags.DIRTY)
   ) {
-  
-    console.log('get do nothing return')
+    console.log('----refreshComputed nothing return---')
     return
   }
   computed.flags &= ~EffectFlags.DIRTY
@@ -402,7 +402,7 @@ export function refreshComputed(computed: ComputedRefImpl): undefined {
 
   try {
     // Prepare deps for tracking, starting from the head
-    prepareDeps(computed)
+    prepareDeps(computed) //拿到他的dep
     /**fengpu 触发新一轮get执行 */
     const value = computed.fn(computed._value)
     /**fengpu 这里表明：只有value改变的时候，才会触发computed收集到的依赖更新 */

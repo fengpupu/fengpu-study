@@ -143,27 +143,38 @@ export class ComputedRefImpl<T = any> implements Subscriber {
    *      一个是将dirty属性置为true
    *      一个是触发依赖计算属性的依赖更新
    *  同时，计算属性的value值改变，也会触发set
-   *  所以，导致计算属性的set函数执行，1、他依赖的响应式数据trigger 2、自己的value属性值改变
-   * 
+   *  所以，导致计算属性的set函数执行:
+   *    1、他依赖的响应式数据trigger
+   *    2、自己的value属性值改变
+   *    注意：他本身并不触发dep更新（待验证）
+   *
+   * 在get的时候，先触发value的get，验证dirty，通过再调用computed.fn
+   *  只要访问了value，就会触发get value，除非是value赋值，才会触发set value
+   *  所以注册的get回调，实际上只会在dirty为true的时候执行
+   *
    * onTrigger
    *  包含在自己的副作用函数中，当依赖的响应式数据改变，会调用这个副作用 （fengpuTODO：需要验证）
    *
    * 问题：
-   *  triggerRef
+   *  triggerRef一个shallowRef
    *    1、为啥不触发set
-   *      实际上 响应数据的更新只会触发当前属性的set （fengpuTODO：待验证）
+   *      实际上 响应数据的更新只会触发当前属性的set，而不是ref.value的set （fengpuTODO：待验证）
    *      set是拿到dep，触发dep的一个方式，而不是dep触发一定来自set，并且set也不一定触发dep更新（计算属性的set就没有，只是一个回调而已）
    *    2、为啥不触发onTrigger
    *    3、从哪里得到的dep
+   *      triggerRef(childArr) == childArr.dep.trigger()
+        
    */
   get value(): T {
+    console.log('---------get computed,not fn--------')
     /**
      * author:fengpu
-     * computed定义的get实际上是computed.fn 而不是
-     * 不是访问就会触发，而是新旧值对比之后，不同才会触发，它实际上不是value的get，而是computed的fn
-     * 可以理解为
+     * computed构造函数定义的get实际上是computed.fn，一个在dirty为true才会触发的回调函数
+     * computed.fn不是访问就会触发，而是新旧值对比之后，不同才会触发，它实际上不是value的get，而是computed的get的一个回调函数
+     * get触发时机：
+     *  只要computed改变，就会触发，哪怕是引用值的深度属性改变，也会触发，只是对比value没有变化，不会触发fn回调
+     *  get的时候，也会收集依赖（传过来的响应式数据，不是computed收集的依赖）
      */
-    // 在track的时候收集依赖，computed在被set的时候，会触发依赖更新，将computed的状态变为dirty。
     const link = __DEV__
       ? this.dep.track({
           target: this,
@@ -171,7 +182,6 @@ export class ComputedRefImpl<T = any> implements Subscriber {
           key: 'value',
         })
       : this.dep.track()
-
     refreshComputed(this)
     // sync version after evaluation
     if (link) {
@@ -251,7 +261,5 @@ export function computed<T>(
     cRef.onTrack = debugOptions.onTrack
     cRef.onTrigger = debugOptions.onTrigger
   }
-  console.log('------cRef------', cRef, cRef.value)
-
   return cRef as any
 }
