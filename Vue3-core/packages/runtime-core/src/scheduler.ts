@@ -166,6 +166,7 @@ export function flushPreFlushCbs(
 }
 
 export function flushPostFlushCbs(seen?: CountMap): void {
+  console.log('---jobs', pendingPostFlushCbs)
   if (pendingPostFlushCbs.length) {
     const deduped = [...new Set(pendingPostFlushCbs)].sort(
       (a, b) => getId(a) - getId(b),

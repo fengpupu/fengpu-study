@@ -1,72 +1,61 @@
-<template>
-  <div>
-    <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-      <el-radio-button :label="false">expand</el-radio-button>
-      <el-radio-button :label="true">collapse</el-radio-button>
-    </el-radio-group>
-    <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo dark-mode"
-      :collapse="isCollapse"
-      @open="handleOpen"
-      @close="handleClose"
-    >
-      <el-sub-menu index="1" popper-class="dark-mode">
-        <template #title>
-          <el-icon><location /></el-icon>
-          <span>Navigator One</span>
-        </template>
-        <el-menu-item-group>
-          <template #title><span>Group One</span></template>
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title><span>item four</span></template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>Navigator Two</template>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <template #title>Navigator Three</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-    </el-menu>
-    <div class="”layput-container“"></div>
-  </div>
-</template>
-
-<script lang="ts" setup>
-import { ref } from "vue";
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from "@element-plus/icons-vue";
-
-const isCollapse = ref(true);
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
+<!--
+ * @Description: 
+ * @Author: fengpu 1126120965@qq.com
+ * @Date: 2024-09-13 10:06:41
+ * @LastEditors: fengpu 1126120965@qq.com
+ * @LastEditTime: 2024-12-09 14:33:17
+ * @FilePath: \fengpu-study\Three\src\views\layout\index.vue
+ * Endless Story. - NANA
+-->
+<script setup lang="ts">
+import { RouterLink, RouterView, useRoute } from "vue-router";
+import { useRouteList } from "../../stores/routeList.ts";
+const routeStore = useRouteList();
+const route = useRoute();
 </script>
 
-<style>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 180px;
-  min-height: 400px;
+<template>
+  <div class="layout-container">
+    <nav class="layout-left">
+      <div
+        v-for="item in routeStore.routeList"
+        :key="item.path"
+        :class="[
+          'left-item',
+          route.name == item.name ? 'left-item-active' : '',
+        ]"
+      >
+        <RouterLink :to="{ path: item.path }">{{ item.name }}</RouterLink>
+      </div>
+    </nav>
+    <main class="layout-content">
+      <RouterView></RouterView>
+    </main>
+  </div>
+  <RouterView />
+</template>
+
+<style scoped>
+.layout-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.layout-left {
+  width: 200px;
+}
+
+.layout-content {
+  flex: 1;
+}
+
+.left-item {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
 }
 </style>

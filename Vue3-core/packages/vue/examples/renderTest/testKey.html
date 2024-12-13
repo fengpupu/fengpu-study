@@ -1,0 +1,95 @@
+<!--
+ * @Description: 
+ * @Author: fengpu 1126120965@qq.com
+ * @Date: 2024-10-29 13:29:22
+ * @LastEditors: fengpu 1126120965@qq.com
+ * @LastEditTime: 2024-11-05 16:34:33
+ * @FilePath: \Vue3-core\packages\vue\examples\renderTest\testKey.html
+ * Endless Story. - NANA
+-->
+<script src="../../dist/vue.global.js"></script>
+
+<div id="father" style="background-color: pink">
+  <div>父组件</div>
+  <button @click="changeMsg">{{message}}</button>
+  <Child :message="message"></Child>
+  <!-- <Child :message="message" :key="message"></Child> -->
+
+</div>
+<script type="text/x-template" id="child">
+  <g>
+    <div style="background-color: aquamarine">
+      <h1>子组件</h1>
+      <p>{{message}}</p>
+    </div>
+  </g>
+</script>
+<script>
+  const {
+    ref,
+    reactive,
+    computed,
+    createApp,
+    isRef,
+    isReactive,
+    onMounted,
+    onUpdated,
+  } = Vue
+  const Child = {
+    template: '#child',
+    props: ['message'],
+    setup(props) {
+      onMounted(() => {
+        console.log('mounted')
+      })
+      onUpdated(() => {
+        console.log('updated')
+      })
+    },
+  }
+
+  const Father = createApp({
+    components: { Child },
+    setup() {
+      let message = ref('message from father')
+      const changeMsg = () => {
+        message.value = 'change'
+      }
+      return {
+        message,
+        changeMsg,
+      }
+    },
+  }).mount('#father')
+</script>
+
+<style>
+  .container {
+    position: relative;
+    padding: 0;
+  }
+  .item {
+    width: 100%;
+    height: 30px;
+    background-color: #f3f3f3;
+    border: 1px solid #666;
+    box-sizing: border-box;
+  }
+  /* 1. declare transition */
+  .fade-move,
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+  }
+  /* 2. declare enter from and leave to state */
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+    transform: scaleY(0.01) translate(30px, 0);
+  }
+  /* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+  .fade-leave-active {
+    position: absolute;
+  }
+</style>
