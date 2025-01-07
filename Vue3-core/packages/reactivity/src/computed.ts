@@ -134,19 +134,18 @@ export class ComputedRefImpl<T = any> implements Subscriber {
    */
   /**
    * author: fengpu
-   * 一般的ref，在get value的时候，收集依赖，在set value的时候，触发依赖更新
-   * computed对应的ref，在get的时候，收集依赖。同时，他自身也是一个依赖，会被get时候使用的响应式数据收集。
+   * 一般的ref，在get value的时候，收集订阅，在set value的时候，触发依赖更新
+   * computed对应的ref，在get的时候，收集订阅。同时，他自身也是一个订阅者，会被get时候使用的响应式数据收集。
    * 在set的时候
-   *  不是触发依赖更新，而是通过改变他依赖的响应式数据，从而使得自己生成的依赖函数执行
+   *  不是触发订阅更新，而是先使得自己dirty为true，再通知他收集的订阅执行，订阅执行时，发现计算属性的dirty为true，从而使得自己的get执行
    *  在是引用类型的时候，也不用创建代理，直接返回
-   *    这个计算属性自己生成的依赖函数做两件事
+   *    这个计算属性自己的set做两件事
    *      一个是将dirty属性置为true
    *      一个是触发依赖计算属性的依赖更新
    *  同时，计算属性的value值改变，也会触发set
    *  所以，导致计算属性的set函数执行:
    *    1、他依赖的响应式数据trigger
    *    2、自己的value属性值改变
-   *    注意：他本身并不触发dep更新（待验证）
    *
    * 在get的时候，先触发value的get，验证dirty，通过再调用computed.fn
    *  只要访问了value，就会触发get value，除非是value赋值，才会触发set value
@@ -181,8 +180,8 @@ export class ComputedRefImpl<T = any> implements Subscriber {
           type: TrackOpTypes.GET,
           key: 'value',
         })
-      : this.dep.track()
-    refreshComputed(this)
+      : this.dep.track()//收集正在get他的activeSub副作用函数
+    refreshComputed(this)//computed变为activeSub，执行被其依赖收集逻辑
     // sync version after evaluation
     if (link) {
       link.version = this.dep.version
